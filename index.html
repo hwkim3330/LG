@@ -260,6 +260,7 @@
         // State
         let isDragging = false;
         let isHovering = false;
+        let entranceComplete = false;
         let startX = 0, startY = 0;
         let dragStartRotateX = 0, dragStartRotateY = 0;
         let targetRotateX = 0, targetRotateY = 0;
@@ -291,9 +292,11 @@
 
         // Animation loop
         function animate() {
-            currentRotateX += (targetRotateX - currentRotateX) * 0.1;
-            currentRotateY += (targetRotateY - currentRotateY) * 0.1;
-            updateRotation();
+            if (entranceComplete) {
+                currentRotateX += (targetRotateX - currentRotateX) * 0.1;
+                currentRotateY += (targetRotateY - currentRotateY) * 0.1;
+                updateRotation();
+            }
             requestAnimationFrame(animate);
         }
 
@@ -361,6 +364,12 @@
             eye.classList.remove('winking');
             void eye.offsetWidth;
             eye.classList.add('winking');
+
+            // Remove winking class after animation ends
+            eye.addEventListener('animationend', function handler() {
+                eye.classList.remove('winking');
+                eye.removeEventListener('animationend', handler);
+            });
         }
 
         // Event listeners
@@ -391,6 +400,12 @@
         // Initialize
         createExtrusionLayers();
         animate();
+
+        // Clear entrance animation after it ends so JS transform works
+        logoScene.addEventListener('animationend', () => {
+            logoScene.style.animation = 'none';
+            entranceComplete = true;
+        }, { once: true });
 
         // Trigger eye appear after path drawing
         setTimeout(() => {
