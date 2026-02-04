@@ -24,21 +24,11 @@
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             touch-action: none;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            padding: 1rem;
         }
 
         .logo-wrapper {
@@ -47,21 +37,16 @@
         }
 
         .logo-scene {
-            width: min(320px, 80vw);
-            height: min(320px, 80vw);
+            width: min(420px, 85vw);
+            height: min(420px, 85vw);
             position: relative;
             transform-style: preserve-3d;
             cursor: grab;
-            transition: transform 0.1s ease-out;
             animation: entrance 0.8s ease-out forwards;
         }
 
         .logo-scene:active {
             cursor: grabbing;
-        }
-
-        .logo-scene.auto-rotating {
-            animation: autoRotate 8s linear infinite;
         }
 
         @keyframes entrance {
@@ -73,11 +58,6 @@
                 transform: scale(1) rotateY(0deg);
                 opacity: 1;
             }
-        }
-
-        @keyframes autoRotate {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
         }
 
         /* Extrusion layers */
@@ -106,6 +86,7 @@
             color: rgba(255,255,255,0.1);
             font-size: clamp(3rem, 15vw, 5rem);
             font-weight: 900;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             transform: scaleX(-1);
         }
 
@@ -160,17 +141,27 @@
             fill: var(--lg-white);
             transform-origin: center;
             transform: scale(0);
-            animation: eyeAppear 0.5s ease-out 1.8s forwards;
+            opacity: 0;
+        }
+
+        .eye.appearing {
+            animation: eyeAppear 0.5s ease-out forwards;
+        }
+
+        .eye.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .eye.winking {
-            animation: wink 0.38s ease-out;
+            opacity: 1;
+            animation: wink 0.38s ease-out forwards;
         }
 
         @keyframes eyeAppear {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         @keyframes wink {
@@ -215,202 +206,68 @@
             transform: translateZ(5px);
         }
 
-        /* Controls */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            justify-content: center;
-            max-width: 400px;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 2rem;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .btn:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn.active {
-            background: var(--lg-red);
-            border-color: var(--lg-red-light);
-        }
-
-        /* Depth slider */
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: rgba(255,255,255,0.7);
-            font-size: 0.85rem;
-        }
-
-        .slider {
-            -webkit-appearance: none;
-            width: 100px;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255,255,255,0.2);
-            outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--lg-red);
-            cursor: pointer;
-            border: 2px solid white;
-        }
-
-        .slider::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--lg-red);
-            cursor: pointer;
-            border: 2px solid white;
-        }
-
-        /* Instructions */
-        .instructions {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.8rem;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 480px) {
-            .container {
-                gap: 1.5rem;
-            }
-
-            .btn {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.85rem;
-            }
-
-            .instructions {
-                font-size: 0.75rem;
-                padding: 0 1rem;
-            }
-        }
-
-        /* Landscape mobile */
+        /* Mobile landscape */
         @media (max-height: 500px) and (orientation: landscape) {
-            .container {
-                flex-direction: row;
-                gap: 2rem;
-            }
-
             .logo-scene {
-                width: min(250px, 40vh);
-                height: min(250px, 40vh);
-            }
-
-            .controls {
-                flex-direction: column;
+                width: min(300px, 70vh);
+                height: min(300px, 70vh);
             }
         }
 
-        /* PWA splash */
+        /* PWA safe areas */
         @media (display-mode: standalone) {
             body {
-                padding-top: env(safe-area-inset-top);
-                padding-bottom: env(safe-area-inset-bottom);
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo-wrapper">
-            <div class="logo-scene" id="logoScene">
-                <!-- Extrusion layers will be added by JS -->
-
-                <!-- Back plate -->
-                <div class="back-plate">
-                    <span>LG</span>
-                </div>
-
-                <!-- Front badge -->
-                <div class="front-badge">
-                    <div class="gloss-top"></div>
-                    <div class="gloss-bottom"></div>
-
-                    <svg class="logo-svg" viewBox="0 0 400 400">
-                        <!-- Eye (Dot) -->
-                        <circle class="eye" id="eye" cx="125" cy="140" r="20"/>
-
-                        <!-- The G -->
-                        <path class="logo-path path-g" d="M 305 85 A 160 160 0 1 0 360 200 L 230 200"/>
-
-                        <!-- The L -->
-                        <path class="logo-path path-l" d="M 165 105 L 165 295 L 260 295"/>
-                    </svg>
-                </div>
-
-                <!-- Specular highlight -->
-                <div class="specular" id="specular"></div>
+    <div class="logo-wrapper">
+        <div class="logo-scene" id="logoScene">
+            <!-- Back plate -->
+            <div class="back-plate">
+                <span>LG</span>
             </div>
-        </div>
 
-        <div class="controls">
-            <button class="btn" id="btnRotate">Auto Rotate</button>
-            <button class="btn" id="btnWink">Wink 😉</button>
-            <button class="btn" id="btnReset">Reset</button>
-            <div class="slider-container">
-                <span>Depth:</span>
-                <input type="range" class="slider" id="depthSlider" min="5" max="30" value="20">
+            <!-- Front badge -->
+            <div class="front-badge">
+                <div class="gloss-top"></div>
+                <div class="gloss-bottom"></div>
+
+                <svg class="logo-svg" viewBox="0 0 400 400">
+                    <!-- Eye (Dot) -->
+                    <circle class="eye" id="eye" cx="125" cy="140" r="20"/>
+
+                    <!-- The G -->
+                    <path class="logo-path path-g" d="M 305 85 A 160 160 0 1 0 360 200 L 230 200"/>
+
+                    <!-- The L -->
+                    <path class="logo-path path-l" d="M 165 105 L 165 295 L 260 295"/>
+                </svg>
             </div>
-        </div>
 
-        <p class="instructions">
-            Drag to rotate • Click logo to wink • Use controls below
-        </p>
+            <!-- Specular highlight -->
+            <div class="specular" id="specular"></div>
+        </div>
     </div>
 
     <script>
-        // Elements
         const logoScene = document.getElementById('logoScene');
         const eye = document.getElementById('eye');
         const specular = document.getElementById('specular');
-        const btnRotate = document.getElementById('btnRotate');
-        const btnWink = document.getElementById('btnWink');
-        const btnReset = document.getElementById('btnReset');
-        const depthSlider = document.getElementById('depthSlider');
 
         // State
-        let isAutoRotating = false;
         let isDragging = false;
+        let isHovering = false;
         let startX = 0, startY = 0;
-        let rotateX = 0, rotateY = 0;
+        let dragStartRotateX = 0, dragStartRotateY = 0;
+        let targetRotateX = 0, targetRotateY = 0;
         let currentRotateX = 0, currentRotateY = 0;
-        let extrusionDepth = 20;
+        const extrusionDepth = 20;
 
         // Create extrusion layers
         function createExtrusionLayers() {
-            // Remove existing layers
-            document.querySelectorAll('.extrusion-layer').forEach(el => el.remove());
-
             for (let i = 0; i < extrusionDepth; i++) {
                 const layer = document.createElement('div');
                 layer.className = 'extrusion-layer';
@@ -421,160 +278,128 @@
                 logoScene.insertBefore(layer, logoScene.firstChild);
             }
 
-            // Update back plate position
             const backPlate = document.querySelector('.back-plate');
             backPlate.style.transform = `translateZ(-${extrusionDepth + 1}px) rotateY(180deg)`;
         }
 
         // Update rotation
         function updateRotation() {
-            if (!isAutoRotating) {
-                logoScene.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
-
-                // Update specular based on rotation
-                const specularOpacity = Math.max(0, 0.3 - (currentRotateY / 100));
-                specular.style.opacity = specularOpacity;
-            }
+            logoScene.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+            const specularOpacity = Math.max(0, 0.3 - (currentRotateY / 100));
+            specular.style.opacity = specularOpacity;
         }
 
-        // Smooth animation loop
+        // Animation loop
         function animate() {
-            if (!isDragging && !isAutoRotating) {
-                // Ease back to center
-                currentRotateX += (rotateX - currentRotateX) * 0.1;
-                currentRotateY += (rotateY - currentRotateY) * 0.1;
-                updateRotation();
-            }
+            currentRotateX += (targetRotateX - currentRotateX) * 0.1;
+            currentRotateY += (targetRotateY - currentRotateY) * 0.1;
+            updateRotation();
             requestAnimationFrame(animate);
         }
 
-        // Mouse/Touch handlers
+        // Mouse hover (3D tilt)
+        function handleMouseMove(e) {
+            if (isDragging) return;
+
+            const rect = logoScene.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const xPct = (e.clientX - centerX) / rect.width;
+            const yPct = (e.clientY - centerY) / rect.height;
+
+            targetRotateY = xPct * 30;
+            targetRotateX = -yPct * 30;
+        }
+
+        function handleMouseEnter() {
+            isHovering = true;
+        }
+
+        function handleMouseLeave() {
+            isHovering = false;
+            if (!isDragging) {
+                targetRotateX = 0;
+                targetRotateY = 0;
+            }
+        }
+
+        // Drag handlers
         function handleStart(e) {
-            if (isAutoRotating) return;
             isDragging = true;
             const point = e.touches ? e.touches[0] : e;
             startX = point.clientX;
             startY = point.clientY;
+            dragStartRotateX = currentRotateX;
+            dragStartRotateY = currentRotateY;
         }
 
         function handleMove(e) {
-            if (!isDragging || isAutoRotating) return;
+            if (!isDragging) return;
             e.preventDefault();
 
             const point = e.touches ? e.touches[0] : e;
             const deltaX = point.clientX - startX;
             const deltaY = point.clientY - startY;
 
-            currentRotateY = rotateY + deltaX * 0.5;
-            currentRotateX = rotateX - deltaY * 0.5;
-
-            // Clamp rotation
-            currentRotateX = Math.max(-45, Math.min(45, currentRotateX));
-            currentRotateY = Math.max(-45, Math.min(45, currentRotateY));
-
-            updateRotation();
+            targetRotateY = Math.max(-45, Math.min(45, dragStartRotateY + deltaX * 0.5));
+            targetRotateX = Math.max(-45, Math.min(45, dragStartRotateX - deltaY * 0.5));
         }
 
         function handleEnd() {
-            if (isDragging) {
-                rotateX = currentRotateX;
-                rotateY = currentRotateY;
-            }
             isDragging = false;
+            if (!isHovering) {
+                targetRotateX = 0;
+                targetRotateY = 0;
+            }
         }
 
-        // Wink animation
+        // Wink
         function wink() {
+            eye.classList.remove('appearing');
+            eye.classList.add('visible');
             eye.classList.remove('winking');
-            void eye.offsetWidth; // Trigger reflow
+            void eye.offsetWidth;
             eye.classList.add('winking');
         }
 
-        // Toggle auto rotate
-        function toggleAutoRotate() {
-            isAutoRotating = !isAutoRotating;
-            btnRotate.classList.toggle('active', isAutoRotating);
-            logoScene.classList.toggle('auto-rotating', isAutoRotating);
-
-            if (!isAutoRotating) {
-                // Reset rotation when stopping
-                rotateX = 0;
-                rotateY = 0;
-                currentRotateX = 0;
-                currentRotateY = 0;
-                logoScene.style.transform = '';
-            }
-        }
-
-        // Reset
-        function reset() {
-            if (isAutoRotating) toggleAutoRotate();
-            rotateX = 0;
-            rotateY = 0;
-            currentRotateX = 0;
-            currentRotateY = 0;
-            updateRotation();
-
-            // Re-trigger draw animation
-            document.querySelectorAll('.logo-path').forEach(path => {
-                path.style.animation = 'none';
-                void path.offsetWidth;
-                path.style.animation = '';
-            });
-
-            eye.style.animation = 'none';
-            void eye.offsetWidth;
-            eye.style.animation = '';
-        }
-
         // Event listeners
+        logoScene.addEventListener('mouseenter', handleMouseEnter);
+        logoScene.addEventListener('mouseleave', handleMouseLeave);
+        logoScene.addEventListener('mousemove', handleMouseMove);
         logoScene.addEventListener('mousedown', handleStart);
         logoScene.addEventListener('touchstart', handleStart, { passive: true });
 
-        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mousemove', (e) => { if (isDragging) handleMove(e); });
         window.addEventListener('touchmove', handleMove, { passive: false });
-
         window.addEventListener('mouseup', handleEnd);
         window.addEventListener('touchend', handleEnd);
 
-        logoScene.addEventListener('click', (e) => {
-            if (!isDragging) wink();
-        });
+        logoScene.addEventListener('click', () => { if (!isDragging) wink(); });
 
-        btnRotate.addEventListener('click', toggleAutoRotate);
-        btnWink.addEventListener('click', wink);
-        btnReset.addEventListener('click', reset);
-
-        depthSlider.addEventListener('input', (e) => {
-            extrusionDepth = parseInt(e.target.value);
-            createExtrusionLayers();
-        });
-
-        // Gyroscope support for mobile
+        // Gyroscope for mobile
         if (window.DeviceOrientationEvent) {
-            let hasGyro = false;
-
             window.addEventListener('deviceorientation', (e) => {
-                if (isAutoRotating || isDragging) return;
-                if (!hasGyro && (e.beta !== null || e.gamma !== null)) {
-                    hasGyro = true;
-                }
-                if (hasGyro) {
-                    const beta = e.beta || 0;  // -180 to 180 (front/back tilt)
-                    const gamma = e.gamma || 0; // -90 to 90 (left/right tilt)
-
-                    currentRotateX = Math.max(-30, Math.min(30, (beta - 45) * 0.5));
-                    currentRotateY = Math.max(-30, Math.min(30, gamma * 0.8));
-                    rotateX = currentRotateX;
-                    rotateY = currentRotateY;
-                    updateRotation();
-                }
+                if (isDragging || isHovering) return;
+                const beta = e.beta || 0;
+                const gamma = e.gamma || 0;
+                targetRotateX = Math.max(-30, Math.min(30, (beta - 45) * 0.5));
+                targetRotateY = Math.max(-30, Math.min(30, gamma * 0.8));
             });
         }
 
         // Initialize
         createExtrusionLayers();
         animate();
+
+        // Trigger eye appear after path drawing
+        setTimeout(() => {
+            eye.classList.add('appearing');
+            eye.addEventListener('animationend', () => {
+                eye.classList.remove('appearing');
+                eye.classList.add('visible');
+            }, { once: true });
+        }, 1800);
     </script>
 </body>
 </html>
